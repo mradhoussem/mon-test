@@ -1,9 +1,10 @@
 "use client";
 
-import { useCreateTask } from "@/app/lib/hooks/useTaskForm";
+import { TablesInsert } from "../../../supabase/supabase-types";
 import CptDropDown from "../../components/cpt_dropdown";
-import CptTextField from "@/app/components/cpt_textfield";
-import type { TablesInsert } from "@/supabase/supabase-types";
+import CptTextField from "../../components/cpt_textfield";
+
+import { useCreateTask } from "../../lib/hooks/useTaskForm";
 
 type TacheInsert = TablesInsert<"taches">;
 

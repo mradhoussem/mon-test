@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getSupabaseBrowserClient } from "@/supabase/browser-client";
 import { toast } from "sonner";
+import { getSupabaseBrowserClient } from "../../../supabase/browser-client";
 
 export function useSignIn() {
   const router = useRouter();

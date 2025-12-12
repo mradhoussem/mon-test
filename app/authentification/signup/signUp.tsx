@@ -3,8 +3,8 @@
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
 import { Toaster } from "sonner";
-import { useSignUp } from "@/app/lib/hooks/useSignUp";
 import { useRouter } from "next/navigation";
+import { useSignUp } from "../../lib/hooks/useSignUp";
 
 export default function SignUpForm() {
   const router = useRouter();

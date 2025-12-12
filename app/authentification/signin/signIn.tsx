@@ -2,8 +2,8 @@
 
 import { motion } from "framer-motion";
 import { Toaster } from "sonner";
-import { useSignIn } from "@/app/lib/hooks/useSignIn";
 import { useRouter } from "next/navigation";
+import { useSignIn } from "../../lib/hooks/useSignIn";
 
 export default function SignIn() {
   const router = useRouter();

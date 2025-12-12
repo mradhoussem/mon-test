@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getSupabaseBrowserClient } from "@/supabase/browser-client";
 import { useRouter } from "next/navigation";
-import type { Tables, TablesUpdate } from "@/supabase/supabase-types";
+import { Tables, TablesUpdate } from "../../../supabase/supabase-types";
+import { getSupabaseBrowserClient } from "../../../supabase/browser-client";
 
 type TableTache = Tables<"taches">;
 type TacheUpdate = TablesUpdate<"taches">;

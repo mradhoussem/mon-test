@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getSupabaseBrowserClient } from "@/supabase/browser-client";
 import { User } from "@supabase/supabase-js";
+import { getSupabaseBrowserClient } from "../../../supabase/browser-client";
 
 /**
  * Hook to verify Supabase user session and listen for auth changes.
@@ -15,7 +15,8 @@ export function useAuth() {
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        const { data: sessionData, error: sessionError } =
+          await supabase.auth.getSession();
         if (sessionError) console.error("Session error:", sessionError);
 
         const sessionUser = sessionData?.session?.user ?? null;
@@ -25,7 +26,8 @@ export function useAuth() {
           return;
         }
 
-        const { data: userData, error: userError } = await supabase.auth.getUser();
+        const { data: userData, error: userError } =
+          await supabase.auth.getUser();
         if (userError) console.error("getUser error:", userError);
 
         if (!userData?.user) {
@@ -45,9 +47,11 @@ export function useAuth() {
 
     verifyUser();
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
 
     return () => listener.subscription.unsubscribe();
   }, [supabase]);

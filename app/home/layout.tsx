@@ -7,7 +7,7 @@ import { LogOut, Menu, X } from "lucide-react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { toast, Toaster } from "sonner";
 import { useState, useEffect } from "react";
-import { useAuth } from "@/app/lib/hooks/useAuth";
+import { useAuth } from "../lib/hooks/useAuth";
 
 export default function HomeLayout({
   children,
@@ -42,7 +42,7 @@ export default function HomeLayout({
 
   const handleLogout = async () => {
     const supabase = (
-      await import("@/supabase/browser-client")
+      await import("../../supabase/browser-client")
     ).getSupabaseBrowserClient();
     const { error } = await supabase.auth.signOut();
     if (error) {

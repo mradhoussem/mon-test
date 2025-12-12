@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { useAuth } from "@/app/lib/hooks/useAuth";
+import { useAuth } from "./lib/hooks/useAuth";
 
 // fade-in hook
 function useCssReady<T extends HTMLElement>() {
@@ -20,7 +20,7 @@ function useCssReady<T extends HTMLElement>() {
 
 export default function HomePage() {
   const router = useRouter();
-  const { user, checkingAuth } = useAuth();
+  const { user, checkingAuth } = useAuth(); 
   const { ref: cssReadyRef, isReady } = useCssReady<HTMLDivElement>();
 
   if (checkingAuth) {

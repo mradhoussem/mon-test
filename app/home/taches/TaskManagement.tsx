@@ -1,10 +1,10 @@
 "use client";
 
+import { enumPriorite } from "../../../supabase/enums/enum_Priorite";
+import { enumStatut } from "../../../supabase/enums/enum_Statut";
 import CptDropDown from "../../components/cpt_dropdown";
 import CptTextField from "../../components/cpt_textfield";
-import { enumStatut } from "@/supabase/enums/enum_Statut";
-import { enumPriorite } from "@/supabase/enums/enum_Priorite";
-import { useTasks } from "@/app/lib/hooks/useTasks";
+import { useTasks } from "../../lib/hooks/useTasks";
 
 export default function TaskManagement() {
   const {

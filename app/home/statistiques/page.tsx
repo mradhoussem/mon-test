@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getSupabaseBrowserClient } from "@/supabase/browser-client";
 import {
   BarChart,
   Bar,
@@ -12,6 +11,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
+import { getSupabaseBrowserClient } from "../../../supabase/browser-client";
 
 interface TaskCounts {
   total: number;

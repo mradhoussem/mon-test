@@ -1,14 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getSupabaseBrowserClient } from "@/supabase/browser-client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { getSupabaseBrowserClient } from "../../../supabase/browser-client";
 
 export function useSignUp() {
   const router = useRouter();
   const supabase = getSupabaseBrowserClient();
-
   const [email, setEmail] = useState("");
   const [fullname, setFullName] = useState("");
   const [password, setPassword] = useState("");
