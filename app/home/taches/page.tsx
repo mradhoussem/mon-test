@@ -14,7 +14,7 @@ export default function TachesPage() {
 
   return (
     
-      <div >
+      <div>
 
       <h1 className="text-3xl font-bold mb-6">Gestion des tâches</h1>
 
@@ -37,7 +37,7 @@ export default function TachesPage() {
       </div>
 
       {/* Tab Content */}
-      <div className="p-6">
+      <div>
         {activeTab === "form" && <CreateTask switchTab={() => setActiveTab("list")} />}
         {activeTab === "list" && <TaskManagement />}
       </div>

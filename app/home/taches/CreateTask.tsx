@@ -32,7 +32,6 @@ export default function CreateTask({ switchTab }: Props) {
   const statutOptions = [
     { value: "a_faire", label: "À faire" },
     { value: "en_cours", label: "En cours" },
-    { value: "termine", label: "Terminé" },
   ];
 
   const prioriteOptions = [
@@ -42,7 +41,7 @@ export default function CreateTask({ switchTab }: Props) {
   ];
 
   return (
-    <div className="max-w-4xl p-8">
+    <div className="max-w-4xl">
       <form
         onSubmit={handleSubmit}
         className="bg-white p-6 rounded-xl shadow-md space-y-5"

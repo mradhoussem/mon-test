@@ -1,7 +1,13 @@
 "use client";
 
-import { enumPriorite } from "../../../supabase/enums/enum_Priorite";
-import { enumStatut } from "../../../supabase/enums/enum_Statut";
+import {
+  enumPriorite,
+  enumPrioriteText,
+} from "../../../supabase/enums/enum_Priorite";
+import {
+  enumStatut,
+  enumStatutText,
+} from "../../../supabase/enums/enum_Statut";
 import CptDropDown from "../../components/cpt_dropdown";
 import CptTextField from "../../components/cpt_textfield";
 import { useTasks } from "../../lib/hooks/useTasks";
@@ -43,74 +49,93 @@ export default function TaskManagement() {
             <tr>
               <th className="px-6 py-3">Titre</th>
               <th className="px-6 py-3">Description</th>
-              <th className="px-6 py-3">Statut</th>
+              <th className="px-6 py-3 min-w-[150px]">Statut</th>
               <th className="px-6 py-3">Priorité</th>
               <th className="px-6 py-3">Échéance</th>
               <th className="px-6 py-3">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {taches.map((t) => (
-              <tr key={t.id} className="border-b text-center hover:bg-gray-50">
-                <td className="px-6 py-4">{t.titre}</td>
-                <td className="px-6 py-4">{t.description ?? "-"}</td>
-
-                <td className="px-6 py-4">
-                  <span
-                    className={`px-3 py-1 rounded-full ${
-                      statutColors[
-                        (t.statut ?? enumStatut.A_Faire) as enumStatut
-                      ]
-                    }`}
-                  >
-                    {t.statut}
-                  </span>
-                </td>
-
-                <td className="px-6 py-4">
-                  <span
-                    className={`px-3 py-1 rounded-full ${
-                      prioriteColors[
-                        (t.priorite ?? enumPriorite.Moyenne) as enumPriorite
-                      ]
-                    }`}
-                  >
-                    {t.priorite}
-                  </span>
-                </td>
-
-                <td className="px-6 py-4">{t.date_echeance ?? "-"}</td>
-
-                <td className="px-6 py-4 flex gap-2 justify-center">
-                  {t.statut !== enumStatut.Termine && (
-                    <button
-                      onClick={() => setEditingTache(t)}
-                      className="px-3 py-1 bg-blue-600 text-white rounded"
-                    >
-                      Modifier
-                    </button>
-                  )}
-
-                  <button
-                    onClick={() => deleteTask(t.id)}
-                    className="px-3 py-1 bg-red-600 text-white rounded"
-                  >
-                    Supprimer
-                  </button>
-
-                  {t.statut !== enumStatut.Termine && (
-                    <button
-                      onClick={() =>
-                        updateTask({ ...t, statut: enumStatut.Termine })
-                      }
-                      className="px-3 py-1 bg-green-600 text-white rounded"
-                    >
-                      Terminer
-                    </button>
-                  )}
+            {taches.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="text-start py-4 text-gray-500 pl-5">
+                  Aucun tâche créée
                 </td>
               </tr>
-            ))}
+            ) : (
+              taches.map((t) => (
+                <tr
+                  key={t.id}
+                  className="border-b text-center hover:bg-gray-50"
+                >
+                  <td className="px-6 py-4">{t.titre}</td>
+                  <td className="px-6 py-4">{t.description ?? "-"}</td>
+
+                  <td className="px-6 py-4">
+                    <span
+                      className={`px-3 py-1 rounded-full ${
+                        statutColors[
+                          (t.statut ?? enumStatut.A_Faire) as enumStatut
+                        ]
+                      }`}
+                    >
+                      {
+                        enumStatutText[
+                          (t.statut ?? enumStatut.A_Faire) as enumStatut
+                        ]
+                      }
+                    </span>
+                  </td>
+
+                  <td className="px-6 py-4">
+                    <span
+                      className={`px-3 py-1 rounded-full ${
+                        prioriteColors[
+                          (t.priorite ?? enumPriorite.Moyenne) as enumPriorite
+                        ]
+                      }`}
+                    >
+                      {
+                        enumPrioriteText[
+                          (t.priorite ?? enumPriorite.Moyenne) as enumPriorite
+                        ]
+                      }
+                    </span>
+                  </td>
+
+                  <td className="px-6 py-4">{t.date_echeance ?? "-"}</td>
+
+                  <td className="px-6 py-4 flex gap-2 justify-center">
+                    {t.statut !== enumStatut.Termine && (
+                      <button
+                        onClick={() => setEditingTache(t)}
+                        className="px-3 py-1 bg-blue-600 text-white rounded"
+                      >
+                        Modifier
+                      </button>
+                    )}
+
+                    <button
+                      onClick={() => deleteTask(t.id)}
+                      className="px-3 py-1 bg-red-600 text-white rounded"
+                    >
+                      Supprimer
+                    </button>
+
+                    {t.statut !== enumStatut.Termine && (
+                      <button
+                        onClick={() =>
+                          updateTask({ ...t, statut: enumStatut.Termine })
+                        }
+                        className="px-3 py-1 bg-green-600 text-white rounded"
+                      >
+                        Terminer
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

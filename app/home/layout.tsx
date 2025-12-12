@@ -139,8 +139,8 @@ export default function HomeLayout({
                     </Dialog.Trigger>
 
                     <Dialog.Portal>
-                      <Dialog.Overlay className="fixed inset-0 bg-black/40" />
-                      <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg p-6 w-80 shadow-lg">
+                      <Dialog.Overlay className="fixed inset-0 bg-black/40 z-50" />
+                      <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg p-6 w-80 shadow-lg z-50">
                         <Dialog.Title className="text-lg font-bold mb-4 text-red-600">
                           Confirmer la déconnexion
                         </Dialog.Title>
