@@ -20,7 +20,6 @@ export default function HomeLayout({
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-
   // Detect screen size
   useEffect(() => {
     const handleResize = () => {
@@ -109,42 +108,40 @@ export default function HomeLayout({
                   ))}
                 </nav>
 
-                
-                  <Dialog.Root
-                    open={logoutDialogOpen}
-                    onOpenChange={setLogoutDialogOpen}
-                  >
-                    <Dialog.Trigger asChild>
-                      <button className="mt-auto flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-red-700 text-white font-semibold hover:bg-red-800 transition-all w-full">
-                        Déconnexion
-                        <LogOut size={18} className="ml-2" />
-                      </button>
-                    </Dialog.Trigger>
+                <Dialog.Root
+                  open={logoutDialogOpen}
+                  onOpenChange={setLogoutDialogOpen}
+                >
+                  <Dialog.Trigger asChild>
+                    <button className="mt-auto flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-red-700 text-white font-semibold hover:bg-red-800 transition-all w-full">
+                      Déconnexion
+                      <LogOut size={18} className="ml-2" />
+                    </button>
+                  </Dialog.Trigger>
 
-                    <Dialog.Portal>
-                      <Dialog.Overlay className="fixed inset-0 bg-black/40 z-50" />
-                      <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg p-6 w-80 shadow-lg z-50">
-                        <Dialog.Title className="text-lg font-bold mb-4 text-red-600">
-                          Confirmer la déconnexion
-                        </Dialog.Title>
-                        <Dialog.Description className="mb-6 text-gray-700">
-                          Voulez-vous vraiment vous déconnecter ?
-                        </Dialog.Description>
-                        <div className="flex justify-end gap-3">
-                          <Dialog.Close className="px-4 py-2 text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-100">
-                            Non
-                          </Dialog.Close>
-                          <button
-                            onClick={handleLogout}
-                            className="px-4 py-2 rounded-lg bg-blue-400 text-white hover:bg-blue-500"
-                          >
-                            Oui
-                          </button>
-                        </div>
-                      </Dialog.Content>
-                    </Dialog.Portal>
-                  </Dialog.Root>
-                )
+                  <Dialog.Portal>
+                    <Dialog.Overlay className="fixed inset-0 bg-black/40 z-50" />
+                    <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg p-6 w-80 shadow-lg z-50">
+                      <Dialog.Title className="text-lg font-bold mb-4 text-red-600">
+                        Confirmer la déconnexion
+                      </Dialog.Title>
+                      <Dialog.Description className="mb-6 text-gray-700">
+                        Voulez-vous vraiment vous déconnecter ?
+                      </Dialog.Description>
+                      <div className="flex justify-end gap-3">
+                        <Dialog.Close className="px-4 py-2 text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-100">
+                          Non
+                        </Dialog.Close>
+                        <button
+                          onClick={handleLogout}
+                          className="px-4 py-2 rounded-lg bg-blue-400 text-white hover:bg-blue-500"
+                        >
+                          Oui
+                        </button>
+                      </div>
+                    </Dialog.Content>
+                  </Dialog.Portal>
+                </Dialog.Root>
               </motion.aside>
             </>
           )}

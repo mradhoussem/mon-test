@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+import { useTasks } from "../../lib/hooks/useTasks";
+import { useTaskFilter } from "../../lib/hooks/useSearchTasks";
 import {
   enumPriorite,
   enumPrioriteText,
@@ -10,7 +13,6 @@ import {
 } from "../../../supabase/enums/enum_Statut";
 import CptDropDown from "../../components/cpt_dropdown";
 import CptTextField from "../../components/cpt_textfield";
-import { useTasks } from "../../lib/hooks/useTasks";
 
 export default function TaskManagement() {
   const {
@@ -21,6 +23,14 @@ export default function TaskManagement() {
     deleteTask,
     updateTask,
   } = useTasks();
+  const {
+    searchTerm,
+    setSearchTerm,
+    filteredTasks,
+    toggleSort,
+    sortField,
+    sortOrder,
+  } = useTaskFilter(taches);
 
   if (loading)
     return (
@@ -43,34 +53,80 @@ export default function TaskManagement() {
 
   return (
     <div className="w-full">
-      <div className="overflow-x-auto mt-10">
+      {/* Search bar */}
+      <div className="mt-6 mb-4 relative max-w-md">
+        <input
+          type="text"
+          placeholder="Rechercher par titre, description ou statut..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <div className="overflow-x-auto mt-2">
         <table className="w-full border-collapse bg-white rounded-xl shadow-xl overflow-hidden">
           <thead className="bg-gray-100">
             <tr>
-              <th className="px-6 py-3">Titre</th>
+              <th
+                className="px-6 py-3 cursor-pointer"
+                onClick={() => toggleSort("titre")}
+              >
+                Titre{" "}
+                {sortField === "titre" ? (sortOrder === "asc" ? "↑" : "↓") : ""}
+              </th>
               <th className="px-6 py-3">Description</th>
-              <th className="px-6 py-3 min-w-[150px]">Statut</th>
-              <th className="px-6 py-3">Priorité</th>
-              <th className="px-6 py-3">Échéance</th>
+              <th
+                className="px-6 py-3 cursor-pointer"
+                onClick={() => toggleSort("statut")}
+              >
+                Statut{" "}
+                {sortField === "statut"
+                  ? sortOrder === "asc"
+                    ? "↑"
+                    : "↓"
+                  : ""}
+              </th>
+              <th
+                className="px-6 py-3 cursor-pointer"
+                onClick={() => toggleSort("priorite")}
+              >
+                Priorité{" "}
+                {sortField === "priorite"
+                  ? sortOrder === "asc"
+                    ? "↑"
+                    : "↓"
+                  : ""}
+              </th>
+              <th
+                className="px-6 py-3 cursor-pointer"
+                onClick={() => toggleSort("date_echeance")}
+              >
+                Échéance{" "}
+                {sortField === "date_echeance"
+                  ? sortOrder === "asc"
+                    ? "↑"
+                    : "↓"
+                  : ""}
+              </th>
               <th className="px-6 py-3">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {taches.length === 0 ? (
+            {filteredTasks.length === 0 ? (
               <tr>
                 <td colSpan={6} className="text-start py-4 text-gray-500 pl-5">
-                  Aucun tâche créée
+                  Aucun tâche correspondante
                 </td>
               </tr>
             ) : (
-              taches.map((t) => (
+              filteredTasks.map((t) => (
                 <tr
                   key={t.id}
                   className="border-b text-center hover:bg-gray-50"
                 >
                   <td className="px-6 py-4">{t.titre}</td>
                   <td className="px-6 py-4">{t.description ?? "-"}</td>
-
                   <td className="px-6 py-4">
                     <span
                       className={`px-3 py-1 rounded-full ${
@@ -79,15 +135,16 @@ export default function TaskManagement() {
                         ]
                       }`}
                     >
+                      {" "}
                       {
                         enumStatutText[
                           (t.statut ?? enumStatut.A_Faire) as enumStatut
                         ]
-                      }
-                    </span>
-                  </td>
-
+                      }{" "}
+                    </span>{" "}
+                  </td>{" "}
                   <td className="px-6 py-4">
+                    {" "}
                     <span
                       className={`px-3 py-1 rounded-full ${
                         prioriteColors[
@@ -95,16 +152,15 @@ export default function TaskManagement() {
                         ]
                       }`}
                     >
+                      {" "}
                       {
                         enumPrioriteText[
                           (t.priorite ?? enumPriorite.Moyenne) as enumPriorite
                         ]
-                      }
-                    </span>
+                      }{" "}
+                    </span>{" "}
                   </td>
-
                   <td className="px-6 py-4">{t.date_echeance ?? "-"}</td>
-
                   <td className="px-6 py-4 flex gap-2 justify-center">
                     {t.statut !== enumStatut.Termine && (
                       <button
@@ -114,14 +170,12 @@ export default function TaskManagement() {
                         Modifier
                       </button>
                     )}
-
                     <button
                       onClick={() => deleteTask(t.id)}
                       className="px-3 py-1 bg-red-600 text-white rounded"
                     >
                       Supprimer
                     </button>
-
                     {t.statut !== enumStatut.Termine && (
                       <button
                         onClick={() =>
@@ -140,18 +194,15 @@ export default function TaskManagement() {
         </table>
       </div>
 
-      {/* Modal d'édition */}
       {editingTache && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50">
           <div className="bg-white w-full max-w-md rounded-xl p-6 shadow-xl">
             <h2 className="text-xl font-bold mb-4">Modifier la tâche</h2>
-
             <CptTextField
               label="Titre"
               value={editingTache.titre}
               onChange={(v) => setEditingTache({ ...editingTache, titre: v })}
             />
-
             <CptTextField
               label="Description"
               value={editingTache.description ?? ""}
@@ -159,7 +210,6 @@ export default function TaskManagement() {
                 setEditingTache({ ...editingTache, description: v })
               }
             />
-
             <CptDropDown
               labelText="Statut"
               closeOptions
@@ -175,9 +225,7 @@ export default function TaskManagement() {
                 { value: enumStatut.En_Cours, label: "En cours" },
               ]}
             />
-
             <div className="mt-3" />
-
             <CptDropDown
               labelText="Priorité"
               closeOptions
@@ -193,9 +241,7 @@ export default function TaskManagement() {
                 label: p,
               }))}
             />
-
             <div className="mt-3" />
-
             <CptTextField
               label="Date d'échéance"
               type="date"
@@ -204,7 +250,6 @@ export default function TaskManagement() {
                 setEditingTache({ ...editingTache, date_echeance: v })
               }
             />
-
             <div className="flex justify-end gap-3 mt-4">
               <button
                 onClick={() => setEditingTache(null)}
@@ -212,7 +257,6 @@ export default function TaskManagement() {
               >
                 Annuler
               </button>
-
               <button
                 onClick={() => updateTask(editingTache)}
                 className="px-4 py-2 bg-blue-600 text-white rounded"
