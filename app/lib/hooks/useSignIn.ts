@@ -1,63 +1,38 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
-import { getSupabaseBrowserClient } from "../../../supabase/browser-client";
+import { signInAction } from "../../../app/authentification/signin/signInAction";
 
 export function useSignIn() {
-  const router = useRouter();
-  const supabase = getSupabaseBrowserClient();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  // Vérifier si l'utilisateur est déjà connecté
-  useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const { data, error } = await supabase.auth.getUser();
+  const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
 
-        if (error && error.message !== "Auth session missing!") {
-          console.error("Erreur vérification utilisateur :", error.message);
-        }
+    try {
+      const res = await signInAction(email, password);
 
-        if (data.user) {
-          router.replace("/home");
-        } else {
-          setCheckingAuth(false);
-        }
-      } catch {
-        setCheckingAuth(false);
+      if (res?.error) {
+        toast.error(res.error);
       }
-    };
-
-    checkUser();
-  }, [supabase, router]);
-
-  const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      toast.error(error.message);
-    } else {
-      toast.success("Connexion réussie !");
-      router.replace("/home");
+    } catch (err) {
+      console.error(err);
+      toast.error("Erreur lors de la connexion.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return {
     email,
-    password,
-    checkingAuth,
     setEmail,
+    password,
     setPassword,
+    loading,
     handleSignIn,
   };
 }

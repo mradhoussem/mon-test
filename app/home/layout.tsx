@@ -7,7 +7,6 @@ import { LogOut, Menu, X } from "lucide-react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { toast, Toaster } from "sonner";
 import { useState, useEffect } from "react";
-import { useAuth } from "../lib/hooks/useAuth";
 
 export default function HomeLayout({
   children,
@@ -16,18 +15,11 @@ export default function HomeLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, checkingAuth } = useAuth();
 
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Redirect if not authenticated
-  useEffect(() => {
-    if (!checkingAuth && !user) {
-      router.replace("/authentification/signin");
-    }
-  }, [user, checkingAuth, router]);
 
   // Detect screen size
   useEffect(() => {
@@ -58,15 +50,6 @@ export default function HomeLayout({
     { href: "/home/statistiques", label: "📊 Statistiques" },
     { href: "/home/taches", label: "📝 Gestion des tâches" },
   ];
-
-  if (checkingAuth) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="w-12 h-12 border-4 border-[#5a1ded] border-dashed rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
   return (
     <>
       <Toaster richColors position="top-right" />
@@ -126,7 +109,7 @@ export default function HomeLayout({
                   ))}
                 </nav>
 
-                {user && (
+                
                   <Dialog.Root
                     open={logoutDialogOpen}
                     onOpenChange={setLogoutDialogOpen}
@@ -161,7 +144,7 @@ export default function HomeLayout({
                       </Dialog.Content>
                     </Dialog.Portal>
                   </Dialog.Root>
-                )}
+                )
               </motion.aside>
             </>
           )}

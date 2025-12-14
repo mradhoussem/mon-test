@@ -7,17 +7,8 @@ import { useSignIn } from "../../lib/hooks/useSignIn";
 
 export default function SignIn() {
   const router = useRouter();
-
-  const { email, password, checkingAuth, setEmail, setPassword, handleSignIn } =
+  const { email, setEmail, password, setPassword, handleSignIn, loading } =
     useSignIn();
-
-  if (checkingAuth) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <p>Vérification en cours...</p>
-      </div>
-    );
-  }
 
   return (
     <>
@@ -41,19 +32,20 @@ export default function SignIn() {
             Veuillez vous connecter pour accéder à votre compte.
           </p>
 
+          {/* ✅ use client-side hook for submit */}
           <form className="flex flex-col space-y-5" onSubmit={handleSignIn}>
             <div className="text-left">
               <label className="text-sm font-medium text-gray-700 mb-1 block">
                 Adresse e-mail
               </label>
-
               <input
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                name="email"
                 placeholder="example@mail.com"
                 required
                 className="input-custom"
+                value={email} // controlled
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
@@ -61,22 +53,23 @@ export default function SignIn() {
               <label className="text-sm font-medium text-gray-700 mb-1 block">
                 Mot de passe
               </label>
-
               <input
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                name="password"
                 placeholder="••••••••"
                 required
                 className="input-custom"
+                value={password} // controlled
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
             <button
               type="submit"
-              className="bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 shadow-lg transition active:scale-[0.98]"
+              disabled={loading}
+              className="bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 shadow-lg transition active:scale-[0.98] disabled:opacity-50"
             >
-              Se connecter
+              {loading ? "Connexion..." : "Se connecter"}
             </button>
           </form>
 

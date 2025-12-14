@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "./lib/hooks/useAuth";
 
-// fade-in hook
 function useCssReady<T extends HTMLElement>() {
   const ref = useRef<T>(null);
   const [isReady, setIsReady] = useState(false);

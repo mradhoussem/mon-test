@@ -1,78 +1,47 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
-import { getSupabaseBrowserClient } from "../../../supabase/browser-client";
+import { useRouter } from "next/navigation";
+import { signUpAction } from "../../../app/authentification/signup/signUpAction";
 
 export function useSignUp() {
   const router = useRouter();
-  const supabase = getSupabaseBrowserClient();
+
   const [email, setEmail] = useState("");
   const [fullname, setFullName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
-  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  // ⬇️ Check user auth on load
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      if (data.user) {
-        router.replace("/home");
-      } else {
-        setCheckingAuth(false);
-      }
-    };
-
-    checkUser();
-
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        if (session?.user) router.replace("/home");
-      }
-    );
-
-    return () => listener?.subscription.unsubscribe();
-  }, [router, supabase]);
-
-  // ⬇️ Sign up handler
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
     if (password !== confirmPassword) {
       toast.error("Les mots de passe ne correspondent pas.");
       return;
     }
 
-    const res = await fetch("/api/checkEmail", {
-      method: "POST",
-      body: JSON.stringify({ email }),
-    });
-    const { exists } = await res.json();
+    setLoading(true);
 
-    if (exists) {
-      toast.error("Cet email existe déjà !");
-      return;
-    }
+    try {
+      const res = await signUpAction({ email, fullname, password });
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { displayName: fullname } },
-    });
+      if (res?.error) {
+        toast.error(res.error);
+        return;
+      }
 
-    if (error) {
-      toast.error(error.message);
-    } else {
       toast.success("Vérifiez votre boîte mail pour confirmer votre compte !");
-      setEmail("");
-      setFullName("");
-      setPassword("");
-      setConfirmPassword("");
+      router.push("/authentification/signin");
+    } catch (err) {
+      console.error(err);
+      toast.error("Erreur lors de l'inscription.");
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   return {
     email,
@@ -80,7 +49,6 @@ export function useSignUp() {
     password,
     confirmPassword,
     showPass,
-    checkingAuth,
 
     setEmail,
     setFullName,
@@ -89,5 +57,6 @@ export function useSignUp() {
     setShowPass,
 
     handleSubmit,
+    loading,
   };
 }

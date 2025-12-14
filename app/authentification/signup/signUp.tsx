@@ -15,22 +15,14 @@ export default function SignUpForm() {
     password,
     confirmPassword,
     showPass,
-    checkingAuth,
     setEmail,
     setFullName,
     setPassword,
     setConfirmPassword,
     setShowPass,
     handleSubmit,
+    loading,
   } = useSignUp();
-
-  if (checkingAuth) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
 
   return (
     <div className="relative flex items-center justify-center min-h-screen overflow-hidden">
@@ -117,11 +109,13 @@ export default function SignUpForm() {
             />
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
-            className="bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 shadow-lg transition active:scale-[0.98]"
+            disabled={loading}
+            className="bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 shadow-lg transition active:scale-[0.98] disabled:opacity-50"
           >
-            S&apos;inscrire
+            {loading ? "Inscription..." : "S'inscrire"}
           </button>
 
           <p className="mt-6 text-gray-700 text-sm">
